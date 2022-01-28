@@ -1,5 +1,6 @@
 package com.ndrewcoding.leilao.login;
 
+import com.ndrewcoding.leilao.leiloes.LeiloesPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -25,9 +26,10 @@ public class LoginPage {
         passwordInput.sendKeys(password);
     }
 
-    public void efetuarLogin() {
+    public LeiloesPage efetuarLogin() {
         WebElement formElement = driver.findElement(By.id("login-form"));
         formElement.submit();
+        return new LeiloesPage(driver);
     }
 
     public boolean estaNaPaginaDeLogin() {
