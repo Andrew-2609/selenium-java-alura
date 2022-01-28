@@ -1,52 +1,63 @@
 package com.ndrewcoding.leilao.login;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class LoginTest {
 
+    private WebDriver driver;
+    private static final String URL_LOGIN = "http://localhost:8080/login";
+
+    @BeforeAll
+    static void beforeAll() {
+        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver");
+    }
+
+    @BeforeEach
+    void setUp() {
+        this.driver = new ChromeDriver();
+        this.driver.navigate().to(URL_LOGIN);
+    }
+
     @Test
     public void deveriaEfetuarLoginComDadosValidos() {
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver");
+        WebElement usernameInput = driver.findElement(By.id("username"));
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        WebElement formElement = driver.findElement(By.id("login-form"));
 
-        WebDriver driver = new ChromeDriver();
+        String username = "fulano";
+        String password = "pass";
 
-        driver.navigate().to("http://localhost:8080/login");
+        usernameInput.sendKeys(username);
+        passwordInput.sendKeys(password);
 
-        driver.findElement(By.id("username")).sendKeys("fulano");
+        formElement.submit();
 
-        driver.findElement(By.id("password")).sendKeys("pass");
-
-        driver.findElement(By.id("login-form")).submit();
-
-        Assertions.assertNotEquals("http://localhost:8080/login", driver.getCurrentUrl());
-        Assertions.assertEquals("fulano", driver.findElement(By.id("usuario-logado")).getText());
-
-        driver.quit();
+        Assertions.assertNotEquals(URL_LOGIN, driver.getCurrentUrl());
+        Assertions.assertEquals(username, driver.findElement(By.id("usuario-logado")).getText());
     }
 
     @Test
     public void naoDeveriaEfetuarLoginComDadosInvalidos() {
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver");
+        WebElement usernameInput = driver.findElement(By.id("username"));
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        WebElement formElement = driver.findElement(By.id("login-form"));
 
-        WebDriver driver = new ChromeDriver();
+        usernameInput.sendKeys("invalido");
+        passwordInput.sendKeys("123");
+        formElement.submit();
 
-        driver.navigate().to("http://localhost:8080/login");
-
-        driver.findElement(By.id("username")).sendKeys("invalido");
-
-        driver.findElement(By.id("password")).sendKeys("123");
-
-        driver.findElement(By.id("login-form")).submit();
-
-        Assertions.assertEquals("http://localhost:8080/login?error", driver.getCurrentUrl());
+        Assertions.assertEquals(URL_LOGIN.concat("?error"), driver.getCurrentUrl());
         Assertions.assertThrows(NoSuchElementException.class, () -> driver.findElement(By.id("usuario-logado")));
         Assertions.assertTrue(driver.getPageSource().contains("Usuário e senha inválidos."));
+    }
 
+    @AfterEach
+    void teardown() {
         driver.quit();
     }
 
