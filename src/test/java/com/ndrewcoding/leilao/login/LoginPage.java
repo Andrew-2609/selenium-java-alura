@@ -17,10 +17,6 @@ public class LoginPage {
         driver.navigate().to(URL_LOGIN);
     }
 
-    public void fechar() {
-        this.driver.quit();
-    }
-
     public void preencherFormularioDeLogin(String username, String password) {
         WebElement usernameInput = driver.findElement(By.id("username"));
         WebElement passwordInput = driver.findElement(By.id("password"));
@@ -52,6 +48,10 @@ public class LoginPage {
 
     public boolean contemText(String texto) {
         return driver.getPageSource().contains(texto);
+    }
+
+    public void fechar() {
+        this.driver.quit();
     }
 
 }
