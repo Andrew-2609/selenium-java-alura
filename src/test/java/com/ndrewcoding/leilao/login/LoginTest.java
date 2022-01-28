@@ -56,6 +56,15 @@ public class LoginTest {
         Assertions.assertTrue(driver.getPageSource().contains("Usuário e senha inválidos."));
     }
 
+    @Test
+    public void naoDeveriaAcessarPaginaRestritaSemEstarLogado() {
+        this.driver.navigate().to("http://localhost:8080/leiloes/2");
+
+        Assertions.assertFalse(driver.getPageSource().contains("Dados do Leilão"));
+
+        Assertions.assertEquals(URL_LOGIN, driver.getCurrentUrl());
+    }
+
     @AfterEach
     void teardown() {
         driver.quit();
