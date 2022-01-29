@@ -3,7 +3,7 @@ package com.ndrewcoding.leilao;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class PageObject {
+public abstract class PageObject {
 
     protected WebDriver webDriver;
 
