@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 public class LeiloesPage {
 
     private final WebDriver driver;
-    private static final String URL_CADASTRO_LEILAO = "http://localhost:8080/leiloes/new";
+    private static final String URL_LEILOES = "http://localhost:8080/leiloes";
 
     public LeiloesPage(WebDriver webDriver) {
         this.driver = webDriver;
@@ -18,7 +18,7 @@ public class LeiloesPage {
     }
 
     public CadastroLeilaoPage carregarFormularioDeCadastroDeLeilao() {
-        this.driver.navigate().to(URL_CADASTRO_LEILAO);
+        this.driver.navigate().to(URL_LEILOES.concat("/new"));
         return new CadastroLeilaoPage(driver);
     }
 
@@ -29,6 +29,10 @@ public class LeiloesPage {
         WebElement colunaValorInicial = ultimaLinhaDaTabelaDeLeiloes.findElement(By.cssSelector("td:nth-child(3)"));
 
         return colunaNome.getText().equals(nome) && colunaDataAbertura.getText().equals(dataAbertura) && colunaValorInicial.getText().equals(valorInicial);
+    }
+
+    public boolean estaNaPaginaAtual() {
+        return this.driver.getCurrentUrl().equals(URL_LEILOES);
     }
 
 }
