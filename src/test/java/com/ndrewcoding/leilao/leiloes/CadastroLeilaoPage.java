@@ -22,4 +22,15 @@ public class CadastroLeilaoPage {
         return new LeiloesPage(this.driver);
     }
 
+    public boolean estaExibindoMensagensDeValidacao() {
+        String pageSource = this.driver.getPageSource();
+
+        boolean minimoDeCaracteresAtingido = pageSource.contains("minimo");
+        boolean campoEstaEmBranco = pageSource.contains("não deve estar em branco");
+        boolean valorGrandeOSuficiente = pageSource.contains("deve ser um valor maior de");
+        boolean dataEstaNoFormatoCorreto = pageSource.contains("deve ser uma data no formato");
+
+        return minimoDeCaracteresAtingido && campoEstaEmBranco && valorGrandeOSuficiente && dataEstaNoFormatoCorreto;
+    }
+
 }
