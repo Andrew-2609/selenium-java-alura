@@ -1,7 +1,9 @@
 package com.ndrewcoding.leilao.leiloes;
 
+import com.ndrewcoding.leilao.login.LoginPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LeiloesTest {
 
@@ -9,7 +11,14 @@ public class LeiloesTest {
 
     @BeforeEach
     void setUp() {
-        this.leiloesPage = new LeiloesPage();
+        LoginPage loginPage = new LoginPage();
+        loginPage.preencherFormularioDeLogin("fulano", "pass");
+        leiloesPage = loginPage.efetuarLogin();
+    }
+
+    @Test
+    public void deveriaCadastrarLeilao() {
+        CadastroLeilaoPage cadastroLeilaoPage = leiloesPage.carregarFormularioDeCadastroDeLeilao();
     }
 
     @AfterEach
