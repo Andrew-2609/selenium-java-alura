@@ -1,59 +1,52 @@
 package com.ndrewcoding.leilao.login;
 
+import com.ndrewcoding.leilao.PageObject;
 import com.ndrewcoding.leilao.leiloes.LeiloesPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class LoginPage {
+public class LoginPage extends PageObject {
 
-    private final WebDriver driver;
     private static final String URL_LOGIN = "http://localhost:8080/login";
 
     public LoginPage() {
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver");
-        driver = new ChromeDriver();
-        driver.navigate().to(URL_LOGIN);
+        super(null);
+        this.webDriver.navigate().to(URL_LOGIN);
     }
 
     public void preencherFormularioDeLogin(String username, String password) {
-        WebElement usernameInput = driver.findElement(By.id("username"));
-        WebElement passwordInput = driver.findElement(By.id("password"));
+        WebElement usernameInput = this.webDriver.findElement(By.id("username"));
+        WebElement passwordInput = this.webDriver.findElement(By.id("password"));
 
         usernameInput.sendKeys(username);
         passwordInput.sendKeys(password);
     }
 
     public LeiloesPage efetuarLogin() {
-        WebElement formElement = driver.findElement(By.id("login-form"));
+        WebElement formElement = this.webDriver.findElement(By.id("login-form"));
         formElement.submit();
-        return new LeiloesPage(driver);
+        return new LeiloesPage(this.webDriver);
     }
 
     public boolean estaNaPaginaDeLogin() {
-        return driver.getCurrentUrl().equals(URL_LOGIN) || driver.getCurrentUrl().equals(URL_LOGIN.concat("?error"));
+        return this.webDriver.getCurrentUrl().equals(URL_LOGIN) || this.webDriver.getCurrentUrl().equals(URL_LOGIN.concat("?error"));
     }
 
     public String getNomeUsuarioLogado() {
         try {
-            return driver.findElement(By.id("usuario-logado")).getText();
+            return this.webDriver.findElement(By.id("usuario-logado")).getText();
         } catch (NoSuchElementException ex) {
             return null;
         }
     }
 
     public void naveParaPaginaDeLeiloes() {
-        this.driver.navigate().to("http://localhost:8080/leiloes/2");
+        this.webDriver.navigate().to("http://localhost:8080/leiloes/2");
     }
 
     public boolean contemText(String texto) {
-        return driver.getPageSource().contains(texto);
-    }
-
-    public void fechar() {
-        this.driver.quit();
+        return this.webDriver.getPageSource().contains(texto);
     }
 
 }
