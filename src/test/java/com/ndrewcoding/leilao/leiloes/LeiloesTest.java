@@ -18,8 +18,8 @@ public class LeiloesTest {
     void setUp() {
         LoginPage loginPage = new LoginPage();
         loginPage.preencherFormularioDeLogin("fulano", "pass");
-        leiloesPage = loginPage.efetuarLogin();
-        cadastroLeilaoPage = leiloesPage.carregarFormularioDeCadastroDeLeilao();
+        this.leiloesPage = loginPage.efetuarLogin();
+        this.cadastroLeilaoPage = leiloesPage.carregarFormularioDeCadastroDeLeilao();
     }
 
     @Test
@@ -28,11 +28,21 @@ public class LeiloesTest {
         String nome = "Leilão do dia ".concat(hoje);
         String valor = "500.00";
 
-        cadastroLeilaoPage.preencherFormularioDeCadastro(nome, hoje, valor);
+        this.cadastroLeilaoPage.preencherFormularioDeCadastro(nome, hoje, valor);
 
-        this.leiloesPage = cadastroLeilaoPage.submeterFormularioDeCadastro();
+        this.leiloesPage = this.cadastroLeilaoPage.submeterFormularioDeCadastro();
 
         Assertions.assertTrue(this.leiloesPage.verificarSeLeilaoEstaCadastrado(nome, hoje, valor));
+    }
+
+    @Test
+    public void deveriaValidarCadastroDeLeilao() {
+        this.cadastroLeilaoPage.preencherFormularioDeCadastro("", "", "");
+
+        this.cadastroLeilaoPage.submeterFormularioDeCadastro();
+
+        Assertions.assertTrue(this.leiloesPage.estaNaPaginaAtual());
+        Assertions.assertTrue(this.cadastroLeilaoPage.estaExibindoMensagensDeValidacao());
     }
 
     @AfterEach
