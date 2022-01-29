@@ -12,18 +12,18 @@ import java.time.format.DateTimeFormatter;
 public class LeiloesTest {
 
     private LeiloesPage leiloesPage;
+    private CadastroLeilaoPage cadastroLeilaoPage;
 
     @BeforeEach
     void setUp() {
         LoginPage loginPage = new LoginPage();
         loginPage.preencherFormularioDeLogin("fulano", "pass");
         leiloesPage = loginPage.efetuarLogin();
+        cadastroLeilaoPage = leiloesPage.carregarFormularioDeCadastroDeLeilao();
     }
 
     @Test
     public void deveriaCadastrarLeilao() {
-        CadastroLeilaoPage cadastroLeilaoPage = leiloesPage.carregarFormularioDeCadastroDeLeilao();
-
         String hoje = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String nome = "Leilão do dia ".concat(hoje);
         String valor = "500.00";
